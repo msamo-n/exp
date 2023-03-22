@@ -24,7 +24,7 @@ jobs:
   
   deployment-charybdis:
     runs-on: ubuntu-latest
-    environment: scylla
+    environment: charybdis
     steps:
       - name: deploy
         run: |
