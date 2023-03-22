@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: deploy
         run: |
-          echo Hello, world of ${{ vars.NAME }} (scylla)
+          echo "Hello, world of ${{ vars.NAME }} (scylla)"
   
   deployment-charybdis:
     runs-on: ubuntu-latest
@@ -28,4 +28,4 @@ jobs:
     steps:
       - name: deploy
         run: |
-          echo Hello, world of ${{ vars.NAME }} (charybdis)
+          echo "Hello, world of ${{ vars.NAME }} (charybdis)"
