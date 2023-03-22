@@ -52,4 +52,4 @@ jobs:
           OUTPUT1: ${{ needs.job1.outputs.output1 }}
         run: |
           echo "$OUTPUT1"
-          echo ${{ github }}
+          echo '${{ toJSON(github) }}'
