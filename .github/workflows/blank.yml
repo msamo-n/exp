@@ -49,10 +49,9 @@ jobs:
     needs: job1
     strategy:
       matrix:
-        robot: ${{ needs.job1.outputs.apply-matrix }}
+        robot: ${{ fromJSON(needs.job1.outputs.apply-matrix) }}
     steps:
       - env:
-          MATRIX: ${{ needs.job1.outputs.apply-matrix }}
+          ROBOT: ${{ matrix.robot }}
         run: |
-          echo "MATRIX = $MATRIX on ${{ matrix.robot }}"
-          echo '${{ toJSON(github) }}'
+          echo "ROBOT is $ROBOT"
