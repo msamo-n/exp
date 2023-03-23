@@ -49,7 +49,7 @@ jobs:
     needs: job1
     strategy:
       matrix:
-        robot: ['scylla', 'charybdis']
+        robot: ${{ needs.job1.outputs.apply-matrix }}
     steps:
       - env:
           MATRIX: ${{ needs.job1.outputs.apply-matrix }}
