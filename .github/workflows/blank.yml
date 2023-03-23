@@ -39,17 +39,17 @@ jobs:
     runs-on: ubuntu-latest
     # Map a step output to a job output
     outputs:
-      output1: ${{ steps.step1.outputs.next_runner }}
+      apply-matrix: ${{ steps.check.outputs.matrix }}
     steps:
-      - id: step1
-        run: echo "::set-output name=next_runner::ubuntu-latest"
+      - id: check
+        run: echo "matrix=['scylla', 'charybdis']" >> $GITHUB_OUTPUT
 
   job2:
-    runs-on: ${{ needs.job1.outputs.output1 }}
+    runs-on: ubuntu-latest
     needs: job1
     steps:
       - env:
-          OUTPUT1: ${{ needs.job1.outputs.output1 }}
+          MATRIX: ${{ needs.job1.outputs.apply-matrix }}
         run: |
-          echo "$OUTPUT1"
+          echo "MATRIX = $MATRIX"
           echo '${{ toJSON(github) }}'
