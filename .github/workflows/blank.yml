@@ -47,6 +47,7 @@ jobs:
   job2:
     runs-on: ubuntu-latest
     needs: job1
+    if: needs.job1.outputs.apply-matrix != '[]'
     strategy:
       matrix:
         robot: ${{ fromJSON(needs.job1.outputs.apply-matrix) }}
