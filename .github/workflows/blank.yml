@@ -42,7 +42,7 @@ jobs:
       apply-matrix: ${{ steps.check.outputs.matrix }}
     steps:
       - id: check
-        run: echo "matrix=['scylla', 'charybdis']" >> $GITHUB_OUTPUT
+        run: echo "matrix=[]" >> $GITHUB_OUTPUT
 
   job2:
     runs-on: ubuntu-latest
