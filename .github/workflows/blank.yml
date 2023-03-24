@@ -23,7 +23,9 @@ jobs:
       apply_matrix: ${{ steps.check.outputs.matrix }}
     steps:
       - id: check
-        run: echo 'matrix={"include":[{"platform":"scylla","version":"0057"},{"platform":"charybdis","version":"0056"}]}' >> $GITHUB_OUTPUT
+        run: |
+          echo "${{ toJSON(github) }}
+          echo 'matrix={"include":[{"platform":"scylla","version":"0057"},{"platform":"charybdis","version":"0056"}]}' >> $GITHUB_OUTPUT
 
   job2:
     runs-on: ubuntu-latest
