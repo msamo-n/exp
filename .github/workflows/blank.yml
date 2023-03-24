@@ -26,6 +26,7 @@ jobs:
         run: |
           echo '${{ toJSON(github) }}'
           echo 'matrix={"include":[{"platform":"scylla","version":"0057"},{"platform":"charybdis","version":"0056"}]}' >> $GITHUB_OUTPUT
+          echo "DRY RUN: ${{ github.event_name != 'push' }}"
 
   job2:
     runs-on: ubuntu-latest
