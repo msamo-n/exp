@@ -45,6 +45,7 @@ jobs:
   conclusion:
     runs-on: ubuntu-latest
     needs: [job1, job2]
+    if: ${{ always() }}
     steps:
       - run: |
           echo "Conclusion it is!"
