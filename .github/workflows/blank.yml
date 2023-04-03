@@ -41,3 +41,10 @@ jobs:
           echo "VERSION=${{ matrix.version }}"
           echo "${{ toJSON(matrix) }}"
           exit -1
+
+  conclusion:
+    runs-on: ubuntu-latest
+    needs: [job1, job2]
+    steps:
+      - run: |
+          echo "Conclusion it is!"
