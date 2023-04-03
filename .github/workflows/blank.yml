@@ -40,3 +40,4 @@ jobs:
           echo "PLATFORM=${{ matrix.platform }}"
           echo "VERSION=${{ matrix.version }}"
           echo "${{ toJSON(matrix) }}"
+          exit -1
