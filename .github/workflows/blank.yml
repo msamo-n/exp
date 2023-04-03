@@ -48,4 +48,8 @@ jobs:
     if: ${{ always() }}
     steps:
       - run: |
-          echo "Conclusion it is!"
+          [[ ${{ needs.job1.result }} != "success" ]] && { echo "EPICALLY FAILED"; exit -1; }
+          [[ ${{ needs.job2.result }} == "success" ]] && { echo "SUCCESS"; exit; }
+          [[ ${{ needs.job2.result }} == "skipped" ]] && { echo "NO CHECKS"; exit; }
+          echo "FAILED"
+          exit -1
