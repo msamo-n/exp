@@ -24,8 +24,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: |
+          env
           if [[ ${{ github.event_name }} == "pull_request" ]]; then
-            curl ${{ github.event.pull_request.diff_url }}
+            curl -v ${{ github.event.pull_request.diff_url }}
           fi
           echo '${{ toJSON(github) }}'
       - id: check
