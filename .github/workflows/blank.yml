@@ -23,16 +23,10 @@ jobs:
       apply_matrix: ${{ steps.check.outputs.matrix }}
     steps:
       - uses: actions/checkout@v3
-      - run: |
-          env
-          if [[ ${{ github.event_name }} == "pull_request" ]]; then
-            curl -v ${{ github.event.pull_request.diff_url }}
-          fi
-          echo '${{ toJSON(github) }}'
       - id: check
         run: |          
           echo 'matrix={"include":[{"platform":"scylla","version":"0057"},{"platform":"charybdis","version":"0056"}]}' >> $GITHUB_OUTPUT
-          echo "DRY RUN: ${{ github.event_name != 'push' }}"
+          echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
 
   job2:
     name: 'The Job (${{ matrix.platform }}: ${{ matrix.version }})'
