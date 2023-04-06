@@ -25,9 +25,7 @@ jobs:
       - uses: actions/checkout@v3
       - run: |
           if [[ ${{ github.event_name }} == "pull_request" ]]; then
-            GIT_BASE=${{ github.event.pull_request.base.sha }}
-            GIT_HEAD=${{ github.sha }}
-            git diff --name-only $GIT_BASE $GIT_HEAD --
+            curl ${{ github.event.pull_request.diff_url }}
           fi
           echo '${{ toJSON(github) }}'
       - id: check
