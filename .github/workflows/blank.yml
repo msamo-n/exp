@@ -24,12 +24,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          lfs: true
+          fetch-depth: 0
       - run: |
           if [[ ${{ github.event_name }} == "pull_request" ]]; then
             GIT_BASE=${{ github.event.pull_request.base.sha }}
             GIT_HEAD=${{ github.sha }}
-            git diff --name-only $GIT_BASE $GIT_HEAD
+            git diff --name-only $GIT_BASE $GIT_HEAD --
           fi
           echo '${{ toJSON(github) }}'
       - id: check
