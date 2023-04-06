@@ -24,7 +24,7 @@ jobs:
     steps:
       - run: |
           if [[ ${{ github.event_name }} == "pull_request" ]]; then
-            GIT_BASE=${{ github.event.pull_request.base.sha }}
+            GIT_BASE=${{ github.base_ref }}
             GIT_HEAD=${{ github.sha }}
             git diff --name-only $GIT_BASE $GIT_HEAD
           fi
