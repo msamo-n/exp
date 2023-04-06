@@ -23,7 +23,12 @@ jobs:
       apply_matrix: ${{ steps.check.outputs.matrix }}
     steps:
       - run: |
-          echo '${{ toJSON(github) }}'
+        if [[ ${{ github.event_name }} == "pull_request" ]]; then
+          GIT_BASE=${{ github.event.pull_request.base.sha }}
+          GIT_HEAD=${{ github.sha }}
+          git diff --name-only $GIT_BASE $GIT_HEAD
+        fi
+        echo '${{ toJSON(github) }}'
       - id: check
         run: |          
           echo 'matrix={"include":[{"platform":"scylla","version":"0057"},{"platform":"charybdis","version":"0056"}]}' >> $GITHUB_OUTPUT
