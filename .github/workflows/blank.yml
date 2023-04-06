@@ -22,6 +22,9 @@ jobs:
     outputs:
       apply_matrix: ${{ steps.check.outputs.matrix }}
     steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
       - run: |
           if [[ ${{ github.event_name }} == "pull_request" ]]; then
             GIT_BASE=${{ github.base_ref }}
