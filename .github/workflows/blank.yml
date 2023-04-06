@@ -27,6 +27,7 @@ jobs:
         run: |          
           echo 'matrix={"include":[{"platform":"scylla","version":"0057"},{"platform":"charybdis","version":"0056"}]}' >> $GITHUB_OUTPUT
           echo "### Hello world! :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "::notice file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
 
   job2:
     name: 'The Job (${{ matrix.platform }}: ${{ matrix.version }})'
