@@ -23,8 +23,6 @@ jobs:
       apply_matrix: ${{ steps.check.outputs.matrix }}
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       - run: |
           if [[ ${{ github.event_name }} == "pull_request" ]]; then
             GIT_BASE=${{ github.event.pull_request.base.sha }}
