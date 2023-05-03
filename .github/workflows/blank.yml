@@ -17,8 +17,8 @@ on:
 jobs:
   job1:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
+#     permissions:
+#       pull-requests: write
     # Map a step output to a job output
     outputs:
       apply_matrix: ${{ steps.check.outputs.matrix }}
