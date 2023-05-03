@@ -18,7 +18,6 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     permissions:
-      issues: write
       pull-requests: write
     # Map a step output to a job output
     outputs:
