@@ -15,21 +15,6 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  commend:
-    runs-on: ubuntu-latest
-    permissions:
-      issues: write
-      pull-requests: write
-    steps:
-      - name: Create issue using REST API
-        run: |
-          curl -v -L \
-          -X POST \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-          https://api.github.com/repos/${{ github.repository }}/issues/13/comments \
-          -d '{"body":"Me too"}'
-
   job1:
     runs-on: ubuntu-latest
     # Map a step output to a job output
@@ -38,6 +23,17 @@ jobs:
     steps:
       - run: |
           echo '${{ toJSON(github) }}'
+      - uses: actions/github-script@v5
+        if: ${{ github.event_name != 'push' }}
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '👋 Thanks for reporting!'
+            })
       - id: check
         run: |          
           echo 'matrix={"include":[{"platform":"scylla","version":"0057"},{"platform":"charybdis","version":"0056"}]}' >> $GITHUB_OUTPUT
