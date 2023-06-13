@@ -2,6 +2,9 @@
 
 name: CI
 
+env:
+  AAA: The Value For AAA
+
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
@@ -15,9 +18,9 @@ on:
     inputs:
       AAA:
         description: 'Do no changes, but check workflow and configuration only'
-        type: boolean
-        required: false
-        default: true
+        type: string
+        required: true
+        default: ${{ env.AAA }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
