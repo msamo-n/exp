@@ -20,15 +20,18 @@ jobs:
     uses: ./.github/workflows/platform.yml
     with:
       platform: AAA
+      tests: ''
   
   platform-work-2:
     needs: preparation
     uses: ./.github/workflows/platform.yml
     with:
       platform: BBB
+      tests: '{"include":[{"test":"first"}, {"test":"second"}]}'
   
   platform-work-3:
     needs: preparation
     uses: ./.github/workflows/platform.yml
     with:
       platform: CCC
+      tests: '{"include":[{"test":"first"}, {"test":"second"}, {"test":"third"}]}'
