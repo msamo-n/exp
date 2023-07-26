@@ -1,0 +1,24 @@
+# This is a basic workflow to help you get started with Actions
+name: Platform Job
+
+on:
+  workflow_call:
+    inputs:
+      PLATFORM:
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      PLATFORM:
+        required: true
+        type: string
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Prepare on ${{ inputs.PLATFORM }}"
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Run on ${{ inputs.PLATFORM }}"
