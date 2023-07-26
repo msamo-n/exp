@@ -7,6 +7,9 @@ on:
       PLATFORM:
         required: true
         type: string
+      TESTS:
+        required: true
+        type: string
   workflow_dispatch:
     inputs:
       PLATFORM:
@@ -18,8 +21,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: echo "Prepare on ${{ inputs.PLATFORM }}"
+
   run:
     needs: prepare
+    if: success() && inputs.TESTS != ''
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(inputs.TESTS) }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Run on ${{ inputs.PLATFORM }}"
+      - run: echo "Run on ${{ inputs.PLATFORM }}, test is ${{ matrix.test }}"
