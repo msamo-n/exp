@@ -27,7 +27,7 @@ jobs:
     with:
       platform: AAA
       dry_run: ${{ inputs.DRY_RUN }}
-      tests: ''
+      tests: '{"include":[{"test":"first"}, {"test":"second"}]}'
   
 #   platform-work-2:
 #     needs: preparation
