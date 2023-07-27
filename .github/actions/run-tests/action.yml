@@ -24,7 +24,7 @@ runs:
       run: |
         echo "step 2 on ${{ inputs.PLATFORM }}"
 
-     - if: !cancelled() && !inputs.DRY_RUN
-       shell: bashg {0}
-       run: |
-         echo "step 3  on ${{ inputs.PLATFORM }}"
+    - if: !cancelled() && !inputs.DRY_RUN
+      shell: bashg {0}
+      run: |
+        echo "step 3  on ${{ inputs.PLATFORM }}"
