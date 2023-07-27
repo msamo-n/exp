@@ -24,7 +24,7 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Prepare on ${{ inputs.PLATFORM }}"
+      - run: echo "Prepare on ${{ inputs.PLATFORM }}, workflow=${{ github.workflow }}"
 
   run:
     needs: prepare
