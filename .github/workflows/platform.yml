@@ -10,6 +10,10 @@ on:
       TESTS:
         required: true
         type: string
+      DRY_RUN:
+        required: false
+        type: boolean
+        default: false
   workflow_dispatch:
     inputs:
       PLATFORM:
@@ -38,3 +42,4 @@ jobs:
         uses: ./.github/actions/run-tests
         with:
           PLATFORM: ${{ inputs.PLATFORM }}
+          DRY_RUN: ${{ inputs.DRY_RUN }}
