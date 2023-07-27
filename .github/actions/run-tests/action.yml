@@ -1,0 +1,21 @@
+name: 'Run Tests'
+description: 'Run tests indeed'
+inputs:
+  PLATFORM:
+    type: string
+    required: true
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Setup Environment
+      shell: bash {0}
+      run: |
+        echo "step 1 on ${{ inputs.PLATFORM }}"
+
+    - name: Run Tests
+      if: ${{ always() }}
+      shell: bash {0}
+      run: |
+        echo "step 2 on ${{ inputs.PLATFORM }}"
