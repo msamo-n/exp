@@ -42,4 +42,4 @@ jobs:
         uses: ./.github/actions/run-tests
         with:
           PLATFORM: ${{ inputs.PLATFORM }}
-          DRY_RUN: ${{ inputs.DRY_RUN }}
+          DRY_RUN: ${{ fromJSON(inputs.DRY_RUN) }}
