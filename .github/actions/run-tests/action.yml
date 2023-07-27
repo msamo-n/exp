@@ -4,6 +4,10 @@ inputs:
   PLATFORM:
     type: string
     required: true
+  DRY_RUN:
+    type: boolean
+    required: false
+    default: false
 
 runs:
   using: "composite"
@@ -12,10 +16,15 @@ runs:
     - name: Setup Environment
       shell: bash {0}
       run: |
-        echo "step 1 on ${{ inputs.PLATFORM }}"
+        echo "step 1, platform=${{ inputs.PLATFORM }}, dry_run=${{ inputs.DRY_RUN }}"
 
     - name: Run Tests
       if: ${{ always() }}
       shell: bash {0}
       run: |
         echo "step 2 on ${{ inputs.PLATFORM }}"
+
+     - if: !cancelled() && !inputs.DRY_RUN
+       shell: bashg {0}
+       run: |
+         echo "step 3  on ${{ inputs.PLATFORM }}"
