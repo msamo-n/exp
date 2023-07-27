@@ -30,4 +30,7 @@ jobs:
       matrix: ${{ fromJSON(inputs.TESTS) }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Run on ${{ inputs.PLATFORM }}, test is ${{ matrix.test }}"
+      - name: Run Indeed
+        uses: ./.github/actions/run-tests
+        with:
+          PLATFORM: ${{ inputs.PLATFORM }}
