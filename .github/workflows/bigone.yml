@@ -27,6 +27,7 @@ jobs:
         run: echo "The Preparation It Is"
   
   platform-work:
+    name: Platform (${{ matrix.platform }})
     needs: preparation
     uses: ./.github/workflows/platform.yml
     strategy:
