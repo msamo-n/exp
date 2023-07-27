@@ -19,12 +19,11 @@ runs:
         echo "step 1, platform=${{ inputs.PLATFORM }}, dry_run=${{ inputs.DRY_RUN }}"
 
     - name: Run Tests
-      if: ${{ always() }}
       shell: bash {0}
       run: |
         echo "step 2 on ${{ inputs.PLATFORM }}"
 
-    - if: !cancelled() && !inputs.DRY_RUN
+    - if: ${{ !cancelled() && !inputs.DRY_RUN }}
       shell: bashg {0}
       run: |
         echo "step 3  on ${{ inputs.PLATFORM }}"
