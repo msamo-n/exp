@@ -11,11 +11,11 @@ on:
         description: 'Make it dry'
         required: false
         default: false
-      PLATFORM_MATRIX:
+      PLATFORM:
         type: string
-        description: 'Platform matrix'
+        description: 'Platform'
         required: false
-        default: '{"include":[{"platform":"AAA"}, {"platform":"BBB"}]}'
+        default: AAA
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -27,14 +27,11 @@ jobs:
         run: echo "The Preparation It Is"
   
   platform-work:
-    name: Platform (${{ matrix.platform }})
+    name: Platform (${{ inputs.PLATFORM }})
     needs: preparation
     uses: ./.github/workflows/platform.yml
-    strategy:
-      fail-fast: false
-      matrix: ${{ fromJSON(inputs.PLATFORM_MATRIX) }}
     with:
-      platform: ${{ matrix.platform }}
+      platform: ${{ inputs.PLATFORM }}
       dry_run: ${{ inputs.DRY_RUN }}
       tests: '{"include":[{"test":"first"}, {"test":"second"}]}'
   
