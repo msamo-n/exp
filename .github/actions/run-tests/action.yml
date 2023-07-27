@@ -23,7 +23,7 @@ runs:
       run: |
         echo "step 2 on ${{ inputs.PLATFORM }}"
 
-    - if: ${{ !inputs.DRY_RUN }}
+    - if: ${{ inputs.DRY_RUN }}
       shell: bashg {0}
       run: |
         echo "step 3  on ${{ inputs.PLATFORM }}"
