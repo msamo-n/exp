@@ -26,8 +26,32 @@ jobs:
       - name: Run a one-line script
         run: echo "The Preparation It Is"
   
-  platform-work:
-    name: Platform (${{ inputs.PLATFORM }})
+  platform-work-1:
+    name: Platform (${{ inputs.PLATFORM }}) 1
+    concurrency:
+      group: ${{ inputs.PLATFORM }}
+    needs: preparation
+    uses: ./.github/workflows/platform.yml
+    with:
+      platform: ${{ inputs.PLATFORM }}
+      dry_run: ${{ inputs.DRY_RUN }}
+      tests: '{"include":[{"test":"first"}, {"test":"second"}]}'
+  
+  platform-work-2:
+    name: Platform (${{ inputs.PLATFORM }}) 2
+    concurrency:
+      group: ${{ inputs.PLATFORM }}
+    needs: preparation
+    uses: ./.github/workflows/platform.yml
+    with:
+      platform: ${{ inputs.PLATFORM }}
+      dry_run: ${{ inputs.DRY_RUN }}
+      tests: '{"include":[{"test":"first"}, {"test":"second"}]}'
+  
+  platform-work-3:
+    name: Platform (${{ inputs.PLATFORM }}) 3
+    concurrency:
+      group: ${{ inputs.PLATFORM }}
     needs: preparation
     uses: ./.github/workflows/platform.yml
     with:
