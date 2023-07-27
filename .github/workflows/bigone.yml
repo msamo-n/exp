@@ -11,6 +11,11 @@ on:
         description: 'Make it dry'
         required: false
         default: false
+      PLATFORM_MATRIX:
+        type: string
+        description: 'Platform matrix'
+        required: false
+        default: '{"include":[{"platform":"AAA"}, {"platform":"BBB"}]}'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -24,8 +29,11 @@ jobs:
   platform-work:
     needs: preparation
     uses: ./.github/workflows/platform.yml
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(inputs.PLATFORM_MATRIX) }}
     with:
-      platform: AAA
+      platform: ${{ matrix.platform }}
       dry_run: ${{ inputs.DRY_RUN }}
       tests: '{"include":[{"test":"first"}, {"test":"second"}]}'
   
