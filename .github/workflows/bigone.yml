@@ -24,7 +24,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run a one-line script
-        run: echo "The Preparation It Is"
+        run: |
+          echo "The Preparation It Is"
+          echo "::notice title=Runner Is Selected::Yes it was"
   
   platform-work-1:
     name: Platform (${{ inputs.PLATFORM }}) 1
