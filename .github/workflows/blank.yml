@@ -7,58 +7,18 @@ env:
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       AAA:
         description: 'Do no changes, but check workflow and configuration only'
         type: string
-        required: true
+        required: false
         default: ${{ env.AAA }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   job1:
     runs-on: ubuntu-latest
-#     permissions:
-#       pull-requests: write
-    # Map a step output to a job output
-    outputs:
-      apply_matrix: ${{ steps.check.outputs.matrix }}
     steps:
       - run: |
-          echo '${{ toJSON(github) }}'
-      - uses: actions/github-script@v6
-        if: ${{ github.event_name != 'push' }}
-        with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '👋 Thanks for reporting!'
-            })
-      - id: check
-        run: |          
-          echo 'matrix={"include":[{"platform":"scylla","version":"0057"},{"platform":"charybdis","version":"0056"}]}' >> $GITHUB_OUTPUT
-          echo "DRY RUN: ${{ github.event_name != 'push' }}"
-
-  job2:
-    runs-on: ubuntu-latest
-    needs: job1
-    if: needs.job1.outputs.apply_matrix != ''
-    strategy:
-      matrix: ${{ fromJSON(needs.job1.outputs.apply_matrix) }}
-    steps:
-      - run: |
-          echo "PLATFORM=${{ matrix.platform }}"
-          echo "VERSION=${{ matrix.version }}"
-          echo "${{ toJSON(matrix) }}"
-          exit -1
+          echo "::notice file=app.js,line=1,col=5,endColumn=7::Missing semicolon"
