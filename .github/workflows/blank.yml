@@ -8,12 +8,6 @@ env:
 # Controls when the workflow will run
 on:
   workflow_dispatch:
-    inputs:
-      AAA:
-        description: 'Do no changes, but check workflow and configuration only'
-        type: string
-        required: false
-        default: ${{ env.AAA }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
