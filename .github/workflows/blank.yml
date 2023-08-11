@@ -16,3 +16,8 @@ jobs:
     steps:
       - run: |
           echo "::notice title=📁 Artifacts are uploaded::http://10.42.9.150:8000/20230810T161128.403165174__Docs/"
+  job2:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "**Nonii, moi!**" >> $GITHUB_STEP_SUMMARY
