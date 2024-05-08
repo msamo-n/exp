@@ -40,3 +40,13 @@ jobs:
     if: ${{ needs.preparation.outputs.CONFIG_JSON_P2 != '' }}
     with:
       CONFIG_JSON: ${{ needs.preparation.outputs.CONFIG_JSON_P2 }}
+  
+  finalize:
+    runs-on: ubuntu-latest
+    needs: [p-1, p-2]
+    if: always()
+    steps:
+      - name: Finalize
+        run: |
+          echo "Finalizing"
+          echo "::notice title=Finalized::Yes it was"
