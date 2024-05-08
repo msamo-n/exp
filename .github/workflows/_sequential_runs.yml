@@ -16,6 +16,7 @@ jobs:
 
   Stage-2:
     if: ${{ !cancelled() && fromJSON(inputs.CONFIG_JSON)[1] }}
+    needs: Stage-1
     uses: ./.github/workflows/platform.yml
     with:
       platform: ${{ fromJSON(inputs.CONFIG_JSON)[1].platform }}
