@@ -25,14 +25,8 @@ jobs:
     needs: preparation
     strategy:
       matrix:
-        platform: ['${{ inputs.PLATFORM }}-1',' ${{ inputs.PLATFORM }}-2']
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      
-      - name: Run platform workflow
-        uses: ./.github/workflows/platform.yml
-        with:
-          platform: ${{ matrix.platform }}
-          tests: '{"include":[{"test":"${{ matrix.platform }}-first"}, {"test":"${{ matrix.platform }}-second"}]}'
+        platform: [PLATF-1, PLATF-2]
+    uses: ./.github/workflows/platform.yml
+    with:
+      platform: ${{ matrix.platform }}
+      tests: '{"include":[{"test":"${{ matrix.platform }}-first"}, {"test":"${{ matrix.platform }}-second"}]}'
