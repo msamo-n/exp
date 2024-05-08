@@ -34,3 +34,6 @@ jobs:
         with:
           PLATFORM: ${{ inputs.PLATFORM }}
           TEST: ${{ matrix.test }}
+      - name: Print Summary
+        run: |
+          echo "[The Maps](https://www.google.com/maps)" >>$GITHUB_STEP_SUMMARY
