@@ -7,15 +7,17 @@ on:
         required: true
 
 jobs:
-  Stage-1:
+  stage-1:
     if: ${{ !cancelled() && fromJSON(inputs.CONFIG_JSON)[0] }}
+    name: On ${{ fromJSON(inputs.CONFIG_JSON)[0].platform }}
     uses: ./.github/workflows/platform.yml
     with:
       platform: ${{ fromJSON(inputs.CONFIG_JSON)[0].platform }}
       tests: ${{ toJSON(fromJSON(inputs.CONFIG_JSON)[0].tests) }}
 
-  Stage-2:
+  stage-2:
     if: ${{ !cancelled() && fromJSON(inputs.CONFIG_JSON)[1] }}
+    name: On ${{ fromJSON(inputs.CONFIG_JSON)[0].platform }}
     needs: Stage-1
     uses: ./.github/workflows/platform.yml
     with:
