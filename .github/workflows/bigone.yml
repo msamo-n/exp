@@ -25,7 +25,7 @@ jobs:
     needs: preparation
     strategy:
       matrix:
-        platform: [${{ inputs.PLATFORM }}-1, ${{ inputs.PLATFORM }}-2]
+        platform: ['${{ inputs.PLATFORM }}-1',' ${{ inputs.PLATFORM }}-2']
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
