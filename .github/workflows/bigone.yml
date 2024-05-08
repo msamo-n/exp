@@ -28,7 +28,7 @@ jobs:
     uses: ./.github/workflows/_sequential_runs.yml
     if: ${{ fromJSON(needs.preparation.outputs.CONFIG_JSON).p1 }}
     with:
-      CONFIG_JSON: ${{ fromJSON(needs.preparation.outputs.CONFIG_JSON).p1 }}
+      CONFIG_JSON: ${{ toJSON(fromJSON(needs.preparation.outputs.CONFIG_JSON).p1) }}
 
   p-2:
     name: Platform 2
@@ -36,7 +36,7 @@ jobs:
     uses: ./.github/workflows/_sequential_runs.yml
     if: ${{ fromJSON(needs.preparation.outputs.CONFIG_JSON).p2 }}
     with:
-      CONFIG_JSON: ${{ fromJSON(needs.preparation.outputs.CONFIG_JSON).p2 }}
+      CONFIG_JSON: ${{ toJSON(fromJSON(needs.preparation.outputs.CONFIG_JSON).p2) }}
   
   finalize:
     runs-on: ubuntu-latest
