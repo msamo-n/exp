@@ -1,0 +1,22 @@
+name: Run Sequential
+on:
+  workflow_call:
+    inputs:
+      CONFIG_JSON:
+        type: string
+        required: true
+
+jobs:
+  Stage 1:
+    if: ${{ !cancelled() && fromJSON(inputs.CONFIG_JSON)[0] }}
+    uses: ./.github/workflows/platform.yml
+    with:
+      platform: ${{ fromJSON(inputs.CONFIG_JSON)[0].platform }}
+      tests: ${{ toJSON(fromJSON(inputs.CONFIG_JSON)[0].tests) }}
+
+  Stage 2:
+    if: ${{ !cancelled() && fromJSON(inputs.CONFIG_JSON)[1] }}
+    uses: ./.github/workflows/platform.yml
+    with:
+      platform: ${{ fromJSON(inputs.CONFIG_JSON)[1].platform }}
+      tests: ${{ toJSON(fromJSON(inputs.CONFIG_JSON)[1].tests) }}
