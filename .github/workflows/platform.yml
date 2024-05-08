@@ -10,29 +10,20 @@ on:
       TESTS:
         required: true
         type: string
-      DRY_RUN:
-        required: false
-        type: boolean
-        default: false
-  workflow_dispatch:
-    inputs:
-      PLATFORM:
-        required: true
-        type: string
 
 jobs:
   prepare:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Prepare on ${{ inputs.PLATFORM }}, workflow=${{ github.workflow }}"
+      - run: echo "Prepare workflow=${{ github.workflow }}. PLATFORM=${{ inputs.PLATFORM }}, TESTS=${{ inputs.TESTS }}"
 
   run:
+    runs-on: ubuntu-latest
     needs: prepare
     if: success() && inputs.TESTS != ''
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(inputs.TESTS) }}
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -42,4 +33,4 @@ jobs:
         uses: ./.github/actions/run-tests
         with:
           PLATFORM: ${{ inputs.PLATFORM }}
-          DRY_RUN: ${{ fromJSON(inputs.DRY_RUN) }}
+          TEST: ${{ matrix.test }}

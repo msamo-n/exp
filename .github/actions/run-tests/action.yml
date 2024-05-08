@@ -4,26 +4,20 @@ inputs:
   PLATFORM:
     type: string
     required: true
-  DRY_RUN:
-    type: boolean
-    required: false
-    default: false
+  TEST:
+    type: string
+    required: true
 
 runs:
   using: "composite"
 
   steps:
-    - name: Setup Environment
+    - name: Prepare
       shell: bash {0}
       run: |
-        echo "step 1, platform=${{ inputs.PLATFORM }}, dry_run=${{ inputs.DRY_RUN }}"
+        echo "step 2 on ${{ inputs.PLATFORM }} for ${{ inputs.TEST }}"
 
     - name: Run Tests
       shell: bash {0}
       run: |
-        echo "step 2 on ${{ inputs.PLATFORM }}"
-
-    - if: ${{ !fromJSON(inputs.DRY_RUN) }}
-      shell: bashg {0}
-      run: |
-        echo "step 3  on ${{ inputs.PLATFORM }}"
+        echo "step 2 on ${{ inputs.PLATFORM }} for ${{ inputs.TEST }}"
