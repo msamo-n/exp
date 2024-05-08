@@ -15,7 +15,7 @@ jobs:
     uses: ./.github/workflows/platform.yml
     with:
       platform: P1
-      tests: ${{ fromJSON(inputs.CONFIG_JSON).P1 }}
+      tests: ${{ toJSON(fromJSON(inputs.CONFIG_JSON).P1) }}
   
   platform-work-2:
     name: Platform P2
@@ -23,4 +23,4 @@ jobs:
     uses: ./.github/workflows/platform.yml
     with:
       platform: P2
-      tests: ${{ fromJSON(inputs.CONFIG_JSON).P2 }}
+      tests: ${{ toJSON(fromJSON(inputs.CONFIG_JSON).P2) }}
