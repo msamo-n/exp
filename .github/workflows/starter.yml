@@ -19,6 +19,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: |
-          gh workflow run bigone.yml
+          gh workflow run -R 'msamo-n/exp' bigone.yml
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
