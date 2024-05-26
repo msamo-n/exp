@@ -10,10 +10,15 @@ jobs:
   preparation:
     permissions:
       issues: write
+      actions: write
     runs-on: ubuntu-latest
     steps:
       - run: |
           gh issue --repo ${{ github.repository }} \
             create --title "Issue title" --body "Issue body"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: |
+          gh workflow run bigone.yml
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
