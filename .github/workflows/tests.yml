@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Enable Auto-merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pr_message=${{ toJSON(github.event.pull_request.body) }}
           echo -e "PR message:\n$pr_message\n----------"
