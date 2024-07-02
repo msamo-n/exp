@@ -15,7 +15,8 @@ jobs:
           echo -e "PR message:\n$pr_message\n----------"
           if [[ "$pr_message" == *"[auto-merge]"* ]]; then
             echo "Auto-merge enabled"
-            gh pr merge --repo ${{ github.repository }} ${{ github.event.number }} --auto
+            gh pr merge --repo ${{ github.repository }} \
+              ${{ github.event.number }} --auto --squash
           else
             echo "Auto-merge not enabled"
           fi
