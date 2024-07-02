@@ -7,6 +7,16 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Enable Auto-merge
+        run: |
+          pr_message=${{ github.event.pull_request.body }}
+          echo "PR message: $pr_message"
+          if [[ "$pr_message" == *"[auto-merge]"* ]]; then
+            echo "Auto-merge enabled"
+            gh pr merge ${{ github.event.number }} --auto
+          else
+            echo "Auto-merge not enabled"
+          fi
       - name: Fake Tests
         run: |
           sleep 3
