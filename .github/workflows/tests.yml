@@ -10,7 +10,7 @@ jobs:
       - name: Enable Auto-merge
         run: |
           pr_message=${{ github.event.pull_request.body }}
-          echo "PR message: $pr_message"
+          echo -e "PR message:\n$pr_message\n----------"
           if [[ "$pr_message" == *"[auto-merge]"* ]]; then
             echo "Auto-merge enabled"
             gh pr merge ${{ github.event.number }} --auto
