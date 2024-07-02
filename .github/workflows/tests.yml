@@ -9,7 +9,7 @@ jobs:
     steps:
       - name: Enable Auto-merge
         run: |
-          pr_message=${{ github.event.pull_request.body }}
+          pr_message=${{ toJSON(github.event.pull_request.body) }}
           echo -e "PR message:\n$pr_message\n----------"
           if [[ "$pr_message" == *"[auto-merge]"* ]]; then
             echo "Auto-merge enabled"
