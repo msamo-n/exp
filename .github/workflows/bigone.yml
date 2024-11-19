@@ -30,9 +30,14 @@ jobs:
 
   publish:
     runs-on: ubuntu-22.04
+    needs: build
     steps:
       - uses: actions/download-artifact@v4
         with:
           pattern: outputs-apk-*.tar
           merge-multiple: true
           path: ./tmp/
+      - run: |
+          tar -xf ./tmp/*.tar
+          ls -lah ./
+          ls -lah ./build/outputs/apk
