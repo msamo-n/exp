@@ -35,14 +35,14 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           pattern: outputs-apk-*.tar
-          merge-multiple: false
+          merge-multiple: true
           path: ./tmp/
       - run: |
           ls -lah ./tmp/
-          tar -xvf ./tmp/outputs-apk-*.tar
-          ls -lah ./
-          ls -lah ./build/outputs/apk/
-          ls -lah ./build/outputs/apk/debug/
-          ls -lah ./build/outputs/apk/release/
-          ls -lah ./build/outputs/apk/releaseSyte/
+          # tar -xvf ./tmp/outputs-apk-*.tar
+          # ls -lah ./
+          # ls -lah ./build/outputs/apk/
+          # ls -lah ./build/outputs/apk/debug/
+          # ls -lah ./build/outputs/apk/release/
+          # ls -lah ./build/outputs/apk/releaseSyte/
          
