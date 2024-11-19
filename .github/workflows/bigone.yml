@@ -39,11 +39,11 @@ jobs:
           path: ./tmp/
       - run: |
           ls -lah ./tmp/
-          tar -xvf ./tmp/*.tar
-          # ls -lah ./
-          # ls -lah ./build/outputs/apk/
-          # ls -lah ./build/outputs/apk/debug/
-          # ls -lah ./build/outputs/apk/release/
-          # ls -lah ./build/outputs/apk/releaseSyte/
+          for I in ../tmp/*.tar ; do tar -xvf $I ; done
+          ls -lah ./
+          ls -lah ./build/outputs/apk/
+          ls -lah ./build/outputs/apk/debug/
+          ls -lah ./build/outputs/apk/release/
+          ls -lah ./build/outputs/apk/releaseSyte/
          
 
