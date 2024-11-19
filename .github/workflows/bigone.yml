@@ -38,6 +38,7 @@ jobs:
           merge-multiple: true
           path: ./tmp/
       - run: |
+          ls -lah ./tmp/
           tar -xf ./tmp/*.tar
           ls -lah ./
           ls -lah ./build/outputs/apk
