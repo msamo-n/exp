@@ -21,12 +21,12 @@ jobs:
           OUTPUT_DIR='./build/outputs/apk/${{ matrix.variant }}'
           mkdir -p $OUTPUT_DIR
           echo "content of ${{ matrix.variant }} build" >$OUTPUT_DIR/text.txt
-          tar -cvf ./outputs-apk.tar $OUTPUT_DIR
+          tar -cvf ./outputs-apk-${{ matrix.variant }}.tar $OUTPUT_DIR
 
       - uses: actions/upload-artifact@v4
         with:
           name: outputs-apk-${{ matrix.variant }}.tar
-          path: ./outputs-apk.tar
+          path: ./outputs-apk-${{ matrix.variant }}.tar
 
   publish:
     runs-on: ubuntu-22.04
@@ -35,11 +35,11 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           pattern: outputs-apk-*.tar
+          merge-multiple: true
           path: ./tmp/
       - run: |
           ls -lah ./tmp/
-          ls -lah ./tmp/*/
-          tar -xvf ./tmp/*/outputs-apk-*.tar
+          tar -xvf ./tmp/*.tar
           # ls -lah ./
           # ls -lah ./build/outputs/apk/
           # ls -lah ./build/outputs/apk/debug/
