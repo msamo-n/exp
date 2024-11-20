@@ -32,7 +32,6 @@ function _set_check_run_id()
     [[ -f "$CHECK_RUNS_CTX_FILE" ]] \
         && CHECK_RUNS_CTX="$(cat "$CHECK_RUNS_CTX_FILE")" \
         || CHECK_RUNS_CTX="{}"
-
     echo "$CHECK_RUNS_CTX" | jq -c ". + {\"$CHECK_RUN_NAME\": \"$1\"}" >"$CHECK_RUNS_CTX_FILE"
 }
 
@@ -72,8 +71,7 @@ function check-run-create()
         echo "Failed to create check run: $output" >&2
         return 1
     }
-
-    echo "Check run created, output: $output" >&2
+    echo "Check run created" >&2
 
     CHECK_RUN_ID="$(echo "$output" | jq -r '.id')"
     _set_check_run_id "$CHECK_RUN_ID"
@@ -90,6 +88,7 @@ function check-run-update()
         echo "Failed to update check run: $output" >&2
         return 1
     }
+    echo "Check run updated" >&2
 }
 
 
@@ -120,5 +119,4 @@ shift
 
 
 [[ "$1" == "--queued" ]] && { check-run-create "queued" ; exit $? ; }
-
 run-as-check "$@"

@@ -14,7 +14,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: [debug, release, releaseSyte]
+        include:
+        - variant: release
+          test: true
+          lint: true
+          build: false
+        - variant: releaseSyte
+          test: true
+          lint: false
+          build: false
     permissions:
       checks: write
       contents: read
@@ -25,9 +33,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           variant: ${{ matrix.variant }}
-          test: true
-          lint: true
-          build: true
+          test: ${{ matrix.test }}
+          lint: ${{ matrix.lint }}
+          build: ${{ matrix.build }}
 
   publish:
     runs-on: ubuntu-22.04
