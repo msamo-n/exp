@@ -40,7 +40,7 @@ runs:
       shell: bash
       run: |
         STATUS_CONTEXT='Linter (${{ inputs.variant }})'
-        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" pending
+        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" 'In progress'
         ./gradlew lint${{ inputs.variant }} && STATE=success || STATE=failure
         ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" "$STATE"
 
@@ -49,7 +49,7 @@ runs:
       shell: bash
       run: |
         STATUS_CONTEXT='Build APK (${{ inputs.variant }})'
-        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" pending
+        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" 'In progress'
         { sleep 10 && echo 'DONE!' ; } && STATE=success || STATE=failure
         # ./gradlew assemble${{ inputs.variant }} \
         #  && STATE=success || STATE=failure
