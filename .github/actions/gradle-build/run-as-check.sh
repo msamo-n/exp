@@ -20,7 +20,7 @@ function check-run-create()
     local status="$2"
     local conclusion="$3"
 
-    local payload='{"name":"'$name'","head_sha":"'$CHECK_RUN_SHA'","status":"'$status'"'
+    local payload='{"name":"'$name'","head_sha":"'${CHECK_RUN_SHA:-$GITHUB_SHA}'","status":"'$status'"'
     if [[ "$conclusion" != "" ]]; then
         payload=$payload',"conclusion":"'$conclusion'"'
     fi

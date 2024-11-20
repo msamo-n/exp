@@ -24,7 +24,7 @@ runs:
     - name: Prepare
       shell: bash
       run: |
-        echo "STATUS_SHA=${{ github.event.pull_request.head.sha }}" >>$GITHUB_ENV
+        echo "CHECK_RUN_SHA=${{ github.event.pull_request.head.sha }}" >>$GITHUB_ENV
 
     - name: Run unit tests
       if: ${{ inputs.test == 'true' }}
