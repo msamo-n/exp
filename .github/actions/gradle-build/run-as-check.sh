@@ -28,7 +28,7 @@ function check-run-create()
 
     echo "Creating check run: $payload" >&2
 
-    echo curl -L \
+    curl -L \
         -X POST \
         -H "Accept: application/vnd.github+json" \
         -H "Authorization: Bearer $GITHUB_TOKEN" \
