@@ -1,18 +1,16 @@
 #!/bin/bash
 
 function get-job-url() {
-    local jobs_json="$(
-        curl -L \
-            -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
-            https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs
-    )"
-    echo "$jobs_json" >&2
+    # local jobs_json="$(
+    #     curl -L \
+    #         -H "Accept: application/vnd.github+json" \
+    #         -H "Authorization: Bearer $GITHUB_TOKEN" \
+    #         -H "X-GitHub-Api-Version: 2022-11-28" \
+    #         https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs
+    # )"
 
-    JOB_URL=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
-
-    # save the job url for next steps
+    # NOTE: it's actually a workflow URL, not a job URL
+    JOB_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
     echo "JOB_URL=$JOB_URL" | tee -a $GITHUB_ENV
 }
 

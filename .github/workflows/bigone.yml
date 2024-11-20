@@ -5,6 +5,8 @@ name: Big One
 on:
   workflow_dispatch:
     inputs:
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
