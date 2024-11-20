@@ -14,7 +14,7 @@ inputs:
     required: false
     default: false
   build:
-    description: 'Is APKs to build?'
+    description: 'Are APKs to build?'
     required: false
     default: true
 
@@ -22,7 +22,7 @@ runs:
   using: "composite"
   steps:
     - name: Prepare
-      shell: bash
+      shell: bash {0}
       run: |
         export CHECK_RUN_SHA=${{ github.event.pull_request.head.sha }}
         echo "CHECK_RUN_SHA=$CHECK_RUN_SHA" >>$GITHUB_ENV
