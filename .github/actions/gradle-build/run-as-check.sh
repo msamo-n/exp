@@ -14,9 +14,21 @@ function get-job-url() {
     echo "JOB_URL=$JOB_URL" | tee -a $GITHUB_ENV
 }
 
+
+function _get_check_run_id()
+{
+    CHECK_RUN_ID="$(echo "${CHECK_RUNS_CTX:-{}}" | jq -r ".\"$CHECK_RUN_NAME\"")"
+}
+
+function _set_check_run_id()
+{
+    CHECK_RUNS_CTX="$(echo "${CHECK_RUNS_CTX:-{}}" | jq -c ". + {\"$CHECK_RUN_NAME\": \"$1\"}")"
+    echo "CHECK_RUNS_CTX=$CHECK_RUNS_CTX" >$GITHUB_ENV
+}
+
 function check-run-req()
 {
-    curl -L \
+    curl -L -s -S --fail-with-body \
         -X "$1" \
         -H "Accept: application/vnd.github+json" \
         -H "Authorization: Bearer $GITHUB_TOKEN" \
@@ -27,11 +39,10 @@ function check-run-req()
 
 function check-run-payload()
 {
-    local name="$1"
     local status="$2"
     local conclusion="$3"
 
-    local payload='{"name":"'$name'","head_sha":"'${CHECK_RUN_SHA:-$GITHUB_SHA}'","status":"'$status'"'
+    local payload='{"name":"'$CHECK_RUN_NAME'","head_sha":"'${CHECK_RUN_SHA:-$GITHUB_SHA}'","status":"'$status'"'
     if [[ "$conclusion" != "" ]]; then
         payload=$payload',"conclusion":"'$conclusion'"'
     fi
@@ -53,7 +64,7 @@ function check-run-create()
     }
 
     CHECK_RUN_ID="$(echo "$output" | jq -r '.id')"
-    echo "CHECK_RUN_ID=$CHECK_RUN_ID"
+    _set_check_run_id "$CHECK_RUN_ID"
 }
 
 
@@ -70,44 +81,26 @@ function check-run-update()
 }
 
 
-
 function run-as-check()
 {
-    local name="$1"
-    shift
-
-    check-run-create "$name" "in_progress"
+    check-run-create "in_progress"
 
     bash -c "$@"
     local exitcode="$?"
 
     local conclusion
     [[ $exitcode == 0 ]] && conclusion="success" || conclusion="failure"
-    check-run-update "$name" "completed" "$conclusion"
+    check-run-update "completed" "$conclusion"
 
     return $exitcode
 }
 
 
+CHECK_RUN_NAME="$1"
+_get_check_run_id
+shift
 
-function report-job-status()
-{
-    local context="$1"
-    local state="$2"
 
-    [[ "$JOB_URL" != "" ]] || get-job-url
-
-    local payload='{"state":"'$state'","target_url":"'$JOB_URL'","context":"'$context'"}'
-    echo "SHA: $STATUS_SHA. Payload: $payload" >&2
-
-    curl -L \
-        -X POST \
-        -H "Accept: application/vnd.github+json" \
-        -H "Authorization: Bearer $GITHUB_TOKEN" \
-        -H "X-GitHub-Api-Version: 2022-11-28" \
-        https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/$STATUS_SHA \
-        -d "$payload"
-}
-
+[[ "$1" == "--queued" ]] && { check-run-create "queued" ; exit $? ; }
 
 run-as-check "$@"
