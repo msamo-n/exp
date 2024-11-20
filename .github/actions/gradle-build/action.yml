@@ -27,7 +27,7 @@ runs:
         echo "STATUS_SHA=${{ github.event.pull_request.head.sha }}" >>$GITHUB_ENV
 
     - name: Run unit tests
-      if: ${{ inputs.test }}
+      if: ${{ inputs.test == 'true' }}
       shell: bash
       run: |
         STATUS_CONTEXT='Unit Tests (${{ inputs.variant }})'
@@ -42,7 +42,7 @@ runs:
     #     ./gradlew lint${{ inputs.variant }}
 
     - name: Build APKs
-      if: ${{ inputs.build }}
+      if: ${{ inputs.build == 'true' }}
       shell: bash
       run: |
         STATUS_CONTEXT='Build APK (${{ inputs.variant }})'
