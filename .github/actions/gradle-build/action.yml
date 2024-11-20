@@ -22,8 +22,8 @@ runs:
   using: "composite"
   steps:
     - name: Run unit tests
-      shell: bash
       if: ${{ inputs.test }}
+      shell: bash
       run: |
         STATUS_CONTEXT='Unit Tests (${{ inputs.variant }})'
         ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" pending
@@ -38,6 +38,7 @@ runs:
 
     - name: Build APKs
       if: ${{ inputs.build }}
+      shell: bash
       run: |
         STATUS_CONTEXT='Build APK (${{ inputs.variant }})'
         ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" pending
