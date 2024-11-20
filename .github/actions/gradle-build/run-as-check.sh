@@ -21,7 +21,7 @@ CHECK_RUNS_CTX_FILE="$SCRIPT_DIR/.ctx.json"
 
 function _get_check_run_id()
 {
-    [[ -f "$CHECK_RUNS_CTX_FILE"]] \
+    [[ -f "$CHECK_RUNS_CTX_FILE" ]] \
         && CHECK_RUNS_CTX="$(cat "$CHECK_RUNS_CTX_FILE")" \
         || CHECK_RUNS_CTX="{}"
     CHECK_RUN_ID="$(echo "$CHECK_RUNS_CTX" | jq -r ".\"$CHECK_RUN_NAME\"")"
@@ -29,7 +29,7 @@ function _get_check_run_id()
 
 function _set_check_run_id()
 {
-    [[ -f "$CHECK_RUNS_CTX_FILE"]] \
+    [[ -f "$CHECK_RUNS_CTX_FILE" ]] \
         && CHECK_RUNS_CTX="$(cat "$CHECK_RUNS_CTX_FILE")" \
         || CHECK_RUNS_CTX="{}"
 
