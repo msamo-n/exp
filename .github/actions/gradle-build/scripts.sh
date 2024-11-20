@@ -23,7 +23,7 @@ function report-job-status()
     [[ "$JOB_URL" != "" ]] || get-job-url
 
     local payload='{"state":"'$state'","target_url":"'$JOB_URL'","context":"'$context'"}'
-    echo "Payload: $paylod" >&2
+    echo "SHA: $GITHUB_SHA. Payload: $payload" >&2
 
     curl -L \
         -X POST \
