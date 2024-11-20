@@ -1,0 +1,59 @@
+name: 'Execute gradle tasks'
+description: 'Execute tasks and report statuses'
+inputs:
+  variant:
+    description: 'Build variant to use'
+    required: false
+    default: 'Release'
+  test:
+    description: 'Are unit tests to run?'
+    required: false
+    default: false
+  lint:
+    description: 'Is linter to run?'
+    required: false
+    default: false
+  build:
+    description: 'Is APKs to build?'
+    required: false
+    default: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run unit tests
+      shell: bash
+      if: ${{ inputs.test }}
+      run: |
+        STATUS_CONTEXT='Unit Tests (${{ inputs.variant }})'
+        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" pending
+        ./gradlew test${{ inputs.variant }}UnitTest \
+          && STATE=success || STATE=failure
+        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" "$STATE"
+
+    # - name: Run linter
+    #   if: ${{ inputs.lint }}
+    #   run: |
+    #     ./gradlew lint${{ inputs.variant }}
+
+    - name: Build APKs
+      if: ${{ inputs.build }}
+      run: |
+        STATUS_CONTEXT='Build APK (${{ inputs.variant }})'
+        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" pending
+        { sleep 10 && echo 'DONE!' ; } && STATE=success || STATE=failure
+        # ./gradlew assemble${{ inputs.variant }} \
+        #  && STATE=success || STATE=failure
+        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" "$STATE"
+
+    # - name: Pack APKs
+    #   if: ${{ inputs.build }}
+    #   run: |
+    #     VAR=${{ matrix.variant }}
+    #     tar -cvf outputs-apk-${{ inputs.variant }}.tar app/build/outputs/apk/${VAR,}/
+
+    # - name: Upload APKs
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: outputs-apk-${{ inputs.variant }}.tar
+    #     path: outputs-apk-${{ inputs.variant }}.tar
