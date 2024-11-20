@@ -14,6 +14,49 @@ function get-job-url() {
     echo "JOB_URL=$JOB_URL" | tee -a $GITHUB_ENV
 }
 
+function check-run-create()
+{
+    local name="$1"
+    local status="$2"
+    local conclusion="$3"
+
+    local payload='{"name":"'$name'","head_sha":"'$CHECK_RUN_SHA'","status":"'$status'"'
+    if [[ "$conclusion" != "" ]]; then
+        payload=$payload',"conclusion":"'$conclusion'"'
+    fi
+    payload="$payload}"
+
+    echo "Creating check run: $payload" >&2
+
+    echo curl -L \
+        -X POST \
+        -H "Accept: application/vnd.github+json" \
+        -H "Authorization: Bearer $GITHUB_TOKEN" \
+        -H "X-GitHub-Api-Version: 2022-11-28" \
+        $GITHUB_API_URL/repos/$GITHUB_REPOSITORY/check-runs \
+        -d "$payload"
+}
+
+
+
+function run-as-check()
+{
+    local name="$1"
+    shift
+
+    check-run-create "$name" "in_progress"
+
+    bash -c "$@"
+    local exitcode="$?"
+
+    local conclusion
+    [[ $exitcode == 0 ]] && conclusion="success" || conclusion="failure"
+    check-run-create "$name" "completed" "$conclusion"
+
+    return $exitcode
+}
+
+
 
 function report-job-status()
 {

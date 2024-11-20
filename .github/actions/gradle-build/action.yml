@@ -48,12 +48,8 @@ runs:
       if: ${{ inputs.build == 'true' }}
       shell: bash
       run: |
-        STATUS_CONTEXT='Build APK (${{ inputs.variant }})'
-        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" pending
-        { sleep 10 && echo 'DONE!' ; } && STATE=success || STATE=failure
-        # ./gradlew assemble${{ inputs.variant }} \
-        #  && STATE=success || STATE=failure
-        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" "$STATE"
+        run-as-check "Build APK (${{ inputs.variant }})" \
+          'sleep 10 ; echo "DONE!"'
 
     # - name: Pack APKs
     #   if: ${{ inputs.build }}
