@@ -25,6 +25,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           variant: ${{ matrix.variant }}
+          test: true
+          lint: true
           build: true
 
   publish:
