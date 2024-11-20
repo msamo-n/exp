@@ -17,13 +17,17 @@ function get-job-url() {
 
 function _get_check_run_id()
 {
-    CHECK_RUN_ID="$(echo "${CHECK_RUNS_CTX:-{}}" | jq -r ".\"$CHECK_RUN_NAME\"")"
+    CHECK_RUN_ID="$(
+        echo "${CHECK_RUNS_CTX:-{}}" | jq -r ".\"$CHECK_RUN_NAME\""
+    )"
 }
 
 function _set_check_run_id()
 {
-    CHECK_RUNS_CTX="$(echo "${CHECK_RUNS_CTX:-{}}" | jq -c ". + {\"$CHECK_RUN_NAME\": \"$1\"}")"
-    echo "CHECK_RUNS_CTX=$CHECK_RUNS_CTX" >$GITHUB_ENV
+    CHECK_RUNS_CTX="$(
+        echo "${CHECK_RUNS_CTX:-{}}" | jq -c ". + {\"$CHECK_RUN_NAME\": \"$1\"}"
+    )"
+    echo "CHECK_RUNS_CTX=$CHECK_RUNS_CTX" | tee -a $GITHUB_ENV
 }
 
 function check-run-req()
@@ -63,6 +67,8 @@ function check-run-create()
         return 1
     }
 
+    echo "Check run created, output: $output" >&2
+
     CHECK_RUN_ID="$(echo "$output" | jq -r '.id')"
     _set_check_run_id "$CHECK_RUN_ID"
 }
@@ -83,7 +89,13 @@ function check-run-update()
 
 function run-as-check()
 {
-    check-run-create "in_progress"
+    if [[ -z "$CHECK_RUN_ID" ]]; then
+        echo "Check run ID is not set, creating a new check run" >&2
+        check-run-create "in_progress"
+    else
+        echo "Check run ID is set to $CHECK_RUN_ID" >&2
+        check-run-update "in_progress"
+    fi
 
     bash -c "$@"
     local exitcode="$?"
