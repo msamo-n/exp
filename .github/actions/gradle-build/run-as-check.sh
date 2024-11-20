@@ -18,14 +18,14 @@ function get-job-url() {
 function _get_check_run_id()
 {
     CHECK_RUN_ID="$(
-        echo "${CHECK_RUNS_CTX:-{}}" | jq -r ".\"$CHECK_RUN_NAME\""
+        echo "${CHECK_RUNS_CTX:-"{}"}" | jq -r ".\"$CHECK_RUN_NAME\""
     )"
 }
 
 function _set_check_run_id()
 {
     CHECK_RUNS_CTX="$(
-        echo "${CHECK_RUNS_CTX:-{}}" | jq -c ". + {\"$CHECK_RUN_NAME\": \"$1\"}"
+        echo "${CHECK_RUNS_CTX:-"{}"}" | jq -c ". + {\"$CHECK_RUN_NAME\": \"$1\"}"
     )"
     echo "CHECK_RUNS_CTX=$CHECK_RUNS_CTX" | tee -a $GITHUB_ENV
 }
