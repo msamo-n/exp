@@ -16,7 +16,7 @@ jobs:
       matrix:
         variant: [debug]
     permissions:
-      statuses: write
+      checks: write
       contents: read
     steps:
       - uses: actions/checkout@v4
