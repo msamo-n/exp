@@ -22,13 +22,13 @@ runs:
   using: "composite"
   steps:
     - name: Prepare
-      shell: bash {0}
+      shell: bash
       run: |
         export CHECK_RUN_SHA=${{ github.event.pull_request.head.sha }}
         echo "CHECK_RUN_SHA=$CHECK_RUN_SHA" >>$GITHUB_ENV
-        [[ '${{ inputs.test }}' == 'true' ]] && ${{ github.action_path }}/run-as-check.sh "Unit Tests (${{ inputs.variant }})" --queued
-        [[ '${{ inputs.lint }}' == 'true' ]] && ${{ github.action_path }}/run-as-check.sh "Lint (${{ inputs.variant }})" --queued
-        [[ '${{ inputs.build }}' == 'true' ]] && ${{ github.action_path }}/run-as-check.sh "Build APK (${{ inputs.variant }})" --queued
+        [[ '${{ inputs.test }}' == 'true' ]] && ${{ github.action_path }}/run-as-check.sh "Unit Tests (${{ inputs.variant }})" --queued || :
+        [[ '${{ inputs.lint }}' == 'true' ]] && ${{ github.action_path }}/run-as-check.sh "Lint (${{ inputs.variant }})" --queued || :
+        [[ '${{ inputs.build }}' == 'true' ]] && ${{ github.action_path }}/run-as-check.sh "Build APK (${{ inputs.variant }})" --queued || :
 
     - name: Run Unit Tests
       if: ${{ inputs.test == 'true' }}
