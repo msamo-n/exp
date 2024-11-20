@@ -39,8 +39,8 @@ function check-run-req()
 
 function check-run-payload()
 {
-    local status="$2"
-    local conclusion="$3"
+    local status="$1"
+    local conclusion="$2"
 
     local payload='{"name":"'$CHECK_RUN_NAME'","head_sha":"'${CHECK_RUN_SHA:-$GITHUB_SHA}'","status":"'$status'"'
     if [[ "$conclusion" != "" ]]; then
