@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: [debug, release, releaseSyte]
+        variant: [debug]
     permissions:
       statuses: write
       contents: read
