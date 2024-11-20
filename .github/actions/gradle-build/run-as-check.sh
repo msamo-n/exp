@@ -52,7 +52,6 @@ function check-run-payload()
     local conclusion="$2"
 
     local payload='{"name":"'$CHECK_RUN_NAME'","head_sha":"'${CHECK_RUN_SHA:-$GITHUB_SHA}'","status":"'$status'"'
-    payload=$payload',"details_url":"'$JOB_URL'"'
     if [[ "$conclusion" != "" ]]; then
         payload=$payload',"conclusion":"'$conclusion'"'
     fi
