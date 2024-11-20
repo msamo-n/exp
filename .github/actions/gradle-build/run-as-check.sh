@@ -14,7 +14,18 @@ function get-job-url() {
     echo "JOB_URL=$JOB_URL" | tee -a $GITHUB_ENV
 }
 
-function check-run-create()
+function check-run-req()
+{
+    curl -L \
+        -X "$1" \
+        -H "Accept: application/vnd.github+json" \
+        -H "Authorization: Bearer $GITHUB_TOKEN" \
+        -H "X-GitHub-Api-Version: 2022-11-28" \
+        $GITHUB_API_URL/repos/$GITHUB_REPOSITORY/check-runs$2 \
+        -d "$3"
+}
+
+function check-run-payload()
 {
     local name="$1"
     local status="$2"
@@ -26,15 +37,36 @@ function check-run-create()
     fi
     payload="$payload}"
 
+    echo "$payload"
+}
+
+
+function check-run-create()
+{
+    local payload="$(check-run-payload "$@")"
     echo "Creating check run: $payload" >&2
 
-    curl -L \
-        -X POST \
-        -H "Accept: application/vnd.github+json" \
-        -H "Authorization: Bearer $GITHUB_TOKEN" \
-        -H "X-GitHub-Api-Version: 2022-11-28" \
-        $GITHUB_API_URL/repos/$GITHUB_REPOSITORY/check-runs \
-        -d "$payload"
+    local output
+    output="$(check-run-req POST "" "$payload")" || {
+        echo "Failed to create check run: $output" >&2
+        return 1
+    }
+
+    CHECK_RUN_ID="$(echo "$output" | jq -r '.id')"
+    echo "CHECK_RUN_ID=$CHECK_RUN_ID"
+}
+
+
+function check-run-update()
+{
+    local payload="$(check-run-payload "$@")"
+    echo "Updating check run: $payload" >&2
+
+    local output
+    output="$(check-run-req PATCH "/$CHECK_RUN_ID" "$payload")" || {
+        echo "Failed to update check run: $output" >&2
+        return 1
+    }
 }
 
 
@@ -51,7 +83,7 @@ function run-as-check()
 
     local conclusion
     [[ $exitcode == 0 ]] && conclusion="success" || conclusion="failure"
-    check-run-create "$name" "completed" "$conclusion"
+    check-run-update "$name" "completed" "$conclusion"
 
     return $exitcode
 }
