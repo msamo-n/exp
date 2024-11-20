@@ -48,7 +48,7 @@ runs:
       shell: bash
       run: |
         ${{ github.action_path }}/run-as-check.sh "Build APK (${{ inputs.variant }})" \
-          'sleep 10 ; echo "DONE!"'
+          './gradlew assemble${{ inputs.variant }}'
 
     # - name: Pack APKs
     #   if: ${{ inputs.build }}
