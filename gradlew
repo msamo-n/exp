@@ -1,16 +1,17 @@
 #!/bin/bash
 
 echo "I am gradlew, I am doing $@"
-sleep 10
+sleep 20
 if [[ "$1" == lint* ]]; then
     echo "I am gradlew, I am failing"
     exit 1
 fi
 if [[ "$1" == assemble* ]]; then
     VAR="${1##assemble}"
-    APK_DIR_NAME="${VAR,}"
-    mkdir -p "build/outputs/apk/$APK_DIR_NAME"
-    echo "Content of APK" > "build/outputs/apk/$APK_DIR_NAME/app.apk"
+    MODNAME="base"
+    APK_DIR="$MODNAME/build/outputs/apk/${VAR,}"
+    mkdir -p "$APK_DIR"
+    echo "Content of APK" > "$APK_DIR/app.apk"
 fi
 echo "I am gradlew, I am done"
 exit 0

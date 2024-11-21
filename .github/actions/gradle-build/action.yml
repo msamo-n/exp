@@ -60,8 +60,7 @@ runs:
       if: ${{ steps.build-apks.outcome == 'success' }}
       shell: bash
       run: |
-        VAR=${{ matrix.variant }}
-        tar -cvf outputs-apk-${{ inputs.variant }}.tar app/build/outputs/apk/${VAR,}/
+        tar -cvf outputs-apk-${{ inputs.variant }}.tar */build/outputs/apk/
 
     - name: Upload APKs
       uses: actions/upload-artifact@v4
