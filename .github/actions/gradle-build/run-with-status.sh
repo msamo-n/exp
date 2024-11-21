@@ -7,17 +7,20 @@ function create-commit-status()
 {
     local payload='{"state":"'$1'","target_url":"'$WORKFLOW_RUN_URL'","context":"'$STATUS_NAME'"}'
     echo "Creating commit status: $payload" >&2
-    curl -L -s -S --fail-with-body \
-        -X POST \
-        -H "Accept: application/vnd.github+json" \
-        -H "Authorization: Bearer $GITHUB_TOKEN" \
-        -H "X-GitHub-Api-Version: 2022-11-28" \
-        "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/statuses/${COMMIT_SHA:-$GITHUB_SHA}" \
-        -d "$payload" \
-        || {
-            echo "Failed to create commit status" >&2
-            return 1
-        }
+    
+    local output
+    output="$(
+        curl -L -s -S --fail-with-body \
+            -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/statuses/${COMMIT_SHA:-$GITHUB_SHA}" \
+            -d "$payload"
+    )" || {
+        echo "Failed to create commit status: $output" >&2
+        return 1
+    }
     echo "Commit status created" >&2
 }
 
