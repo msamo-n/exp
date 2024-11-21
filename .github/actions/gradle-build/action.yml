@@ -24,11 +24,7 @@ runs:
     - name: Prepare
       shell: bash
       run: |
-        export CHECK_RUN_SHA=${{ github.event.pull_request.head.sha }}
-        echo "CHECK_RUN_SHA=$CHECK_RUN_SHA" >>$GITHUB_ENV
-        [[ '${{ inputs.test }}' == 'true' ]] && ${{ github.action_path }}/run-as-check.sh "Unit Tests (${{ inputs.variant }})" --queued || :
-        [[ '${{ inputs.lint }}' == 'true' ]] && ${{ github.action_path }}/run-as-check.sh "Lint (${{ inputs.variant }})" --queued || :
-        [[ '${{ inputs.build }}' == 'true' ]] && ${{ github.action_path }}/run-as-check.sh "Build APK (${{ inputs.variant }})" --queued || :
+        echo "COMMIT_SHA=${{ github.event.pull_request.head.sha }}" >>$GITHUB_ENV
 
     - name: Run Unit Tests
       id: run-unit-tests
@@ -36,7 +32,7 @@ runs:
       shell: bash
       continue-on-error: true
       run: |
-        ${{ github.action_path }}/run-as-check.sh "Unit Tests (${{ inputs.variant }})" \
+        ${{ github.action_path }}/run-with-status.sh "Unit Tests (${{ inputs.variant }})" \
           './gradlew test${{ inputs.variant }}UnitTest'
 
     - name: Run Linter
@@ -45,7 +41,7 @@ runs:
       shell: bash
       continue-on-error: true
       run: |
-        ${{ github.action_path }}/run-as-check.sh "Lint (${{ inputs.variant }})" \
+        ${{ github.action_path }}/run-with-status.sh "Lint (${{ inputs.variant }})" \
           './gradlew lint${{ inputs.variant }}'
 
     - name: Build APKs
@@ -54,7 +50,7 @@ runs:
       shell: bash
       continue-on-error: true
       run: |
-        ${{ github.action_path }}/run-as-check.sh "Build APK (${{ inputs.variant }})" \
+        ${{ github.action_path }}/run-with-status.sh "Build APK (${{ inputs.variant }})" \
           './gradlew assemble${{ inputs.variant }}'
 
     - name: Pack APKs
