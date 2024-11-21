@@ -50,4 +50,4 @@ jobs:
           ls -lah 
           tar -xf ./tmp/*.tar
           ls -lah ./
-          ls -lah ./build/outputs/apk
+          ls -lah */build/outputs/apk/
