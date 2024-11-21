@@ -7,7 +7,7 @@ function create-commit-status()
 {
     local payload='{"state":"'$1'","target_url":"'$WORKFLOW_RUN_URL'","context":"'$STATUS_NAME'"}'
     echo "Creating commit status: $payload" >&2
-    curl -L \
+    curl -L -s -S --fail-with-body \
         -X POST \
         -H "Accept: application/vnd.github+json" \
         -H "Authorization: Bearer $GITHUB_TOKEN" \
