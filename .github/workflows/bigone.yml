@@ -5,6 +5,8 @@ name: Big One
 on:
   workflow_dispatch:
     inputs:
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -12,7 +14,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        variant: [debug, release, releaseSyte]
+        include:
+        - variant: release
+          test: true
+          lint: true
+          build: false
+        - variant: releaseSyte
+          test: true
+          lint: false
+          build: true
     permissions:
       statuses: write
       contents: read
@@ -23,7 +33,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           variant: ${{ matrix.variant }}
-          build: true
+          test: ${{ matrix.test }}
+          lint: ${{ matrix.lint }}
+          build: ${{ matrix.build }}
 
   publish:
     runs-on: ubuntu-22.04
@@ -38,4 +50,4 @@ jobs:
           ls -lah 
           tar -xf ./tmp/*.tar
           ls -lah ./
-          ls -lah ./build/outputs/apk
+          ls -lah */build/outputs/apk/

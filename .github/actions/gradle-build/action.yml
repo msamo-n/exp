@@ -14,46 +14,73 @@ inputs:
     required: false
     default: false
   build:
-    description: 'Is APKs to build?'
+    description: 'Are APKs to build?'
     required: false
     default: true
 
 runs:
   using: "composite"
   steps:
-    - name: Run unit tests
+    - name: Prepare
       shell: bash
-      if: ${{ inputs.test }}
       run: |
-        STATUS_CONTEXT='Unit Tests (${{ inputs.variant }})'
-        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" pending
-        ./gradlew test${{ inputs.variant }}UnitTest \
-          && STATE=success || STATE=failure
-        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" "$STATE"
+        if [[ '${{ github.event_name }}' == 'push' ]] ; then
+          COMMIT_SHA="${{ github.sha }}"
+        elif [[ '${{ github.event_name }}' == 'pull_request' ]] ; then
+          COMMIT_SHA="${{ github.event.pull_request.head.sha }}"
+        else
+          echo "Unsupported event: '${{ github.event_name }}'"
+          exit 1
+        fi
+        echo "COMMIT_SHA=$COMMIT_SHA" >>$GITHUB_ENV
 
-    # - name: Run linter
-    #   if: ${{ inputs.lint }}
-    #   run: |
-    #     ./gradlew lint${{ inputs.variant }}
+    - name: Run Unit Tests
+      id: run-unit-tests
+      if: ${{ inputs.test == 'true' }}
+      shell: bash
+      continue-on-error: true
+      run: |
+        ${{ github.action_path }}/run-with-status.sh "Unit Tests (${{ inputs.variant }})" \
+          './gradlew test${{ inputs.variant }}UnitTest'
+
+    - name: Run Linter
+      id: run-linter
+      if: ${{ inputs.lint == 'true' }}
+      shell: bash
+      continue-on-error: true
+      run: |
+        ${{ github.action_path }}/run-with-status.sh "Lint (${{ inputs.variant }})" \
+          './gradlew lint${{ inputs.variant }}'
 
     - name: Build APKs
-      if: ${{ inputs.build }}
+      id: build-apks
+      if: ${{ inputs.build == 'true' }}
+      shell: bash
+      continue-on-error: true
       run: |
-        STATUS_CONTEXT='Build APK (${{ inputs.variant }})'
-        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" pending
-        { sleep 10 && echo 'DONE!' ; } && STATE=success || STATE=failure
-        # ./gradlew assemble${{ inputs.variant }} \
-        #  && STATE=success || STATE=failure
-        ${{ github.action_path }}/scripts.sh report-job-status "$STATUS_CONTEXT" "$STATE"
+        ${{ github.action_path }}/run-with-status.sh "Build APK (${{ inputs.variant }})" \
+          './gradlew assemble${{ inputs.variant }}'
 
-    # - name: Pack APKs
-    #   if: ${{ inputs.build }}
-    #   run: |
-    #     VAR=${{ matrix.variant }}
-    #     tar -cvf outputs-apk-${{ inputs.variant }}.tar app/build/outputs/apk/${VAR,}/
+    - name: Pack APKs
+      id: pack-apks
+      if: ${{ steps.build-apks.outcome == 'success' }}
+      shell: bash
+      run: |
+        tar -cvf outputs-apk-${{ inputs.variant }}.tar */build/outputs/apk/
 
-    # - name: Upload APKs
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: outputs-apk-${{ inputs.variant }}.tar
-    #     path: outputs-apk-${{ inputs.variant }}.tar
+    - name: Upload APKs
+      id: upload-apks
+      uses: actions/upload-artifact@v4
+      if: ${{ steps.pack-apks.outcome == 'success' }}
+      with:
+        name: outputs-apk-${{ inputs.variant }}.tar
+        path: outputs-apk-${{ inputs.variant }}.tar
+
+    - name: Conclusion
+      shell: bash
+      run: |
+        [[ ${{ steps.run-unit-tests.outcome }} != 'failure' ]] \
+          && [[ ${{ steps.run-linter.outcome }} != 'failure' ]] \
+          && [[ ${{ steps.build-apks.outcome }} != 'failure' ]] \
+          && [[ ${{ steps.pack-apks.outcome }} != 'failure' ]] \
+          && [[ ${{ steps.upload-apks.outcome }} != 'failure' ]] \
