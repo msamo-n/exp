@@ -26,7 +26,7 @@ runs:
       run: |
         if [[ '${{ github.event_name }}' == 'push' ]] ; then
           COMMIT_SHA="${{ github.sha }}"
-        else if [[ '${{ github.event_name }}' == 'pull_request' ]] ; then
+        elif [[ '${{ github.event_name }}' == 'pull_request' ]] ; then
           COMMIT_SHA="${{ github.event.pull_request.head.sha }}"
         else
           echo "Unsupported event: '${{ github.event_name }}'"
