@@ -13,7 +13,12 @@ function create-commit-status()
         -H "Authorization: Bearer $GITHUB_TOKEN" \
         -H "X-GitHub-Api-Version: 2022-11-28" \
         "$GITHUB_API_URL/repos/$GITHUB_REPOSITORY/statuses/${COMMIT_SHA:-$GITHUB_SHA}" \
-        -d "$payload"
+        -d "$payload" \
+        || {
+            echo "Failed to create commit status" >&2
+            return 1
+        }
+    echo "Commit status created" >&2
 }
 
 
