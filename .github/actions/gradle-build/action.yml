@@ -33,6 +33,7 @@ runs:
     - name: Run Unit Tests
       if: ${{ inputs.test == 'true' }}
       shell: bash
+      continue-on-error: true
       run: |
         ${{ github.action_path }}/run-as-check.sh "Unit Tests (${{ inputs.variant }})" \
           './gradlew test${{ inputs.variant }}UnitTest'
@@ -40,25 +41,31 @@ runs:
     - name: Run Linter
       if: ${{ inputs.lint == 'true' }}
       shell: bash
+      continue-on-error: true
       run: |
         ${{ github.action_path }}/run-as-check.sh "Lint (${{ inputs.variant }})" \
           './gradlew lint${{ inputs.variant }}'
 
     - name: Build APKs
+      id: build-apks
       if: ${{ inputs.build == 'true' }}
       shell: bash
+      continue-on-error: true
       run: |
         ${{ github.action_path }}/run-as-check.sh "Build APK (${{ inputs.variant }})" \
           './gradlew assemble${{ inputs.variant }}'
 
-    # - name: Pack APKs
-    #   if: ${{ inputs.build }}
-    #   run: |
-    #     VAR=${{ matrix.variant }}
-    #     tar -cvf outputs-apk-${{ inputs.variant }}.tar app/build/outputs/apk/${VAR,}/
+    - name: Pack APKs
+      id: pack-apks
+      if: ${{ steps.build-apks.outcome == 'success' }}
+      shell: bash
+      run: |
+        VAR=${{ matrix.variant }}
+        tar -cvf outputs-apk-${{ inputs.variant }}.tar app/build/outputs/apk/${VAR,}/
 
-    # - name: Upload APKs
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: outputs-apk-${{ inputs.variant }}.tar
-    #     path: outputs-apk-${{ inputs.variant }}.tar
+    - name: Upload APKs
+      uses: actions/upload-artifact@v4
+      if: ${{ steps.pack-apks.outcome == 'success' }}
+      with:
+        name: outputs-apk-${{ inputs.variant }}.tar
+        path: outputs-apk-${{ inputs.variant }}.tar

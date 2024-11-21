@@ -4,21 +4,6 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CHECK_RUNS_CTX_FILE="$SCRIPT_DIR/.ctx.json"
 
 
-function get-job-url() {
-    # local jobs_json="$(
-    #     curl -L \
-    #         -H "Accept: application/vnd.github+json" \
-    #         -H "Authorization: Bearer $GITHUB_TOKEN" \
-    #         -H "X-GitHub-Api-Version: 2022-11-28" \
-    #         https://api.github.com/repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/jobs
-    # )"
-
-    # NOTE: it's actually a workflow URL, not a job URL
-    JOB_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-    echo "JOB_URL=$JOB_URL" | tee -a $GITHUB_ENV
-}
-
-
 function _get_check_run_id()
 {
     [[ -f "$CHECK_RUNS_CTX_FILE" ]] \
@@ -52,6 +37,7 @@ function check-run-payload()
     local conclusion="$2"
 
     local payload='{"name":"'$CHECK_RUN_NAME'","head_sha":"'${CHECK_RUN_SHA:-$GITHUB_SHA}'","status":"'$status'"'
+    payload=$payload',"details_url":"'$CHECK_RUN_DETAILS_URL'"'
     if [[ "$conclusion" != "" ]]; then
         payload=$payload',"conclusion":"'$conclusion'"'
     fi
@@ -114,6 +100,7 @@ function run-as-check()
 
 
 CHECK_RUN_NAME="$1"
+CHECK_RUN_DETAILS_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"  # URL of the workflow run
 _get_check_run_id
 shift
 
