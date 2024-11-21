@@ -22,7 +22,7 @@ jobs:
         - variant: releaseSyte
           test: true
           lint: false
-          build: false
+          build: true
     permissions:
       checks: write
       contents: read
