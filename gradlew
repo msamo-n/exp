@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "I am gradlew, I am doing $@"
-# sleep 10
+sleep 10
 if [[ "$1" == lint* ]]; then
     echo "I am gradlew, I am failing"
     exit 1
