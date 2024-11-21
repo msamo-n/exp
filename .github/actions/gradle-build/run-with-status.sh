@@ -25,7 +25,7 @@ function run-with-sommit-status()
     local exitcode="$?"
 
     local state
-    [[ $exitcode == 0 ]] && conclusion="success" || conclusion="failure"
+    [[ $exitcode == 0 ]] && state="success" || state="failure"
     create-commit-status "$state"
 
     return $exitcode
