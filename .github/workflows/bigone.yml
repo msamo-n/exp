@@ -24,7 +24,7 @@ jobs:
           lint: false
           build: true
     permissions:
-      checks: write
+      statuses: write
       contents: read
     steps:
       - uses: actions/checkout@v4
