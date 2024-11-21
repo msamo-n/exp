@@ -2,7 +2,6 @@
 
 WORKFLOW_RUN_URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID" 
 
-
 function create-commit-status()
 {
     local payload='{"state":"'$1'","target_url":"'$WORKFLOW_RUN_URL'","context":"'$STATUS_NAME'"}'
@@ -24,23 +23,16 @@ function create-commit-status()
     echo "Commit status created" >&2
 }
 
-
-function run-with-sommit-status()
-{
-    create-commit-status "pending"
-
-    bash -c "$@"
-    local exitcode="$?"
-
-    local state
-    [[ $exitcode == 0 ]] && state="success" || state="failure"
-    create-commit-status "$state"
-
-    return $exitcode
-}
-
-
 STATUS_NAME="$1"
 shift
 
-run-with-sommit-status "$@"
+create-commit-status "pending"
+
+bash -c "$@"
+EXITCODE="$?"
+
+[[ $EXITCODE == 0 ]] && STATE="success" || STATE="failure"
+create-commit-status "$STATE"
+
+exit $EXITCODE
+
