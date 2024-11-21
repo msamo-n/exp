@@ -31,6 +31,7 @@ runs:
         [[ '${{ inputs.build }}' == 'true' ]] && ${{ github.action_path }}/run-as-check.sh "Build APK (${{ inputs.variant }})" --queued || :
 
     - name: Run Unit Tests
+      id: run-unit-tests
       if: ${{ inputs.test == 'true' }}
       shell: bash
       continue-on-error: true
@@ -39,6 +40,7 @@ runs:
           './gradlew test${{ inputs.variant }}UnitTest'
 
     - name: Run Linter
+      id: run-linter
       if: ${{ inputs.lint == 'true' }}
       shell: bash
       continue-on-error: true
@@ -63,8 +65,18 @@ runs:
         tar -cvf outputs-apk-${{ inputs.variant }}.tar */build/outputs/apk/
 
     - name: Upload APKs
+      id: upload-apks
       uses: actions/upload-artifact@v4
       if: ${{ steps.pack-apks.outcome == 'success' }}
       with:
         name: outputs-apk-${{ inputs.variant }}.tar
         path: outputs-apk-${{ inputs.variant }}.tar
+
+    - name: Conclusion
+      shell: bash
+      run: |
+        [[ ${{ steps.run-unit-tests.outcome }} != 'failure' ]] \
+          && [[ ${{ steps.run-linter.outcome }} != 'failure' ]] \
+          && [[ ${{ steps.build-apks.outcome }} != 'failure' ]] \
+          && [[ ${{ steps.pack-apks.outcome }} != 'failure' ]] \
+          && [[ ${{ steps.upload-apks.outcome }} != 'failure' ]] \
