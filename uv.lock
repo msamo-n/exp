@@ -1,0 +1,53 @@
+version = 1
+revision = 2
+requires-python = ">=3.11"
+
+[manifest]
+members = [
+    "core",
+    "packages",
+    "pkga",
+    "pkgb",
+    "pkgc",
+]
+
+[[package]]
+name = "core"
+version = "0.1.0"
+source = { editable = "packages/core" }
+
+[[package]]
+name = "packages"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "core" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "core", editable = "packages/core" }]
+
+[[package]]
+name = "pkga"
+version = "0.1.0"
+source = { virtual = "packages/pkgA" }
+dependencies = [
+    { name = "pkgb" },
+    { name = "pkgc" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pkgb", editable = "packages/pkgB" },
+    { name = "pkgc", editable = "packages/pkgC" },
+]
+
+[[package]]
+name = "pkgb"
+version = "0.1.0"
+source = { editable = "packages/pkgB" }
+
+[[package]]
+name = "pkgc"
+version = "0.1.0"
+source = { editable = "packages/pkgC" }
