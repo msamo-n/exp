@@ -1,9 +1,18 @@
+[build-system]
+requires = ["setuptools>=67.7.2"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "Packages"
+name = "tnc"
 version = "0.1.0"
-description = "Add your description here"
+description = "Umbrella package for Testing&Certification Python packages"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+pkga = [ "pkga" ]
+pkgb = [ "pkgb" ]
+pkgc = [ "pkgc" ]
 
 [tool.uv.workspace]
 members = [
@@ -15,3 +24,9 @@ core = { workspace = true }
 pkga = { workspace = true }
 pkgb = { workspace = true }
 pkgc = { workspace = true }
+
+# [tool.uv.sources]
+# pkga = { path = "packages/pkgA" }
+# pkgb = { path = "packages/pkgB" }
+# pkgc = { path = "packages/pkgC" }
+# core = { path = "packages/core" }

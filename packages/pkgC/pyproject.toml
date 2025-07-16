@@ -6,8 +6,6 @@ readme = "README.md"
 authors = [
     { name = "Mikhail Samokhin", email = "mikhail.samokhin@nexigroup.com" }
 ]
-requires-python = ">=3.11"
-dependencies = []
 
 [build-system]
 requires = ["hatchling"]

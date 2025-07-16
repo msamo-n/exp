@@ -1,5 +1,6 @@
-from pkgB import pkgB
-from pkgC import pkgC
+# from pkgB import pkgB
+from tnc.pkgC import pkgC
+from tnc.pkgB import pkgB
 
 
 def main():
