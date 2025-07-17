@@ -20,4 +20,3 @@ core = { workspace = true }
 pkga = { workspace = true }
 pkgb = { workspace = true }
 pkgc = { workspace = true }
-httpx = { workspace = true }
