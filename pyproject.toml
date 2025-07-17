@@ -1,7 +1,3 @@
-[build-system]
-requires = ["setuptools>=67.7.2"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "tnc"
 version = "0.1.0"
@@ -24,9 +20,4 @@ core = { workspace = true }
 pkga = { workspace = true }
 pkgb = { workspace = true }
 pkgc = { workspace = true }
-
-# [tool.uv.sources]
-# pkga = { path = "packages/pkgA" }
-# pkgb = { path = "packages/pkgB" }
-# pkgc = { path = "packages/pkgC" }
-# core = { path = "packages/core" }
+httpx = { workspace = true }
