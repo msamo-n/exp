@@ -1,2 +1,2 @@
 def pkgB():
-    print("This is pkgB. 5!")
+    print("This is pkgB. 6!")
