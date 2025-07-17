@@ -6,7 +6,7 @@ from tnc.pkgB import pkgB
 def main():
     pkgB()
     pkgC()
-    print("Hello from pkga! 3")
+    print("Hello from pkga! 4")
 
 
 if __name__ == "__main__":
