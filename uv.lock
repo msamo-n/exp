@@ -1,0 +1,66 @@
+version = 1
+revision = 2
+requires-python = ">=3.11"
+
+[manifest]
+members = [
+    "core",
+    "pkga",
+    "pkgb",
+    "pkgc",
+    "tnc",
+]
+
+[[package]]
+name = "core"
+version = "0.1.0"
+source = { editable = "packages/core" }
+
+[[package]]
+name = "pkga"
+version = "0.1.0"
+source = { virtual = "packages/pkgA" }
+dependencies = [
+    { name = "pkgb" },
+    { name = "pkgc" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pkgb", editable = "packages/pkgB" },
+    { name = "pkgc", editable = "packages/pkgC" },
+]
+
+[[package]]
+name = "pkgb"
+version = "0.1.0"
+source = { editable = "packages/pkgB" }
+
+[[package]]
+name = "pkgc"
+version = "0.1.0"
+source = { editable = "packages/pkgC" }
+
+[[package]]
+name = "tnc"
+version = "0.1.0"
+source = { editable = "." }
+
+[package.optional-dependencies]
+pkga = [
+    { name = "pkga" },
+]
+pkgb = [
+    { name = "pkgb" },
+]
+pkgc = [
+    { name = "pkgc" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "pkga", marker = "extra == 'pkga'", virtual = "packages/pkgA" },
+    { name = "pkgb", marker = "extra == 'pkgb'", editable = "packages/pkgB" },
+    { name = "pkgc", marker = "extra == 'pkgc'", editable = "packages/pkgC" },
+]
+provides-extras = ["pkga", "pkgb", "pkgc"]

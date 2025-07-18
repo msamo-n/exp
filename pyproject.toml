@@ -1,0 +1,22 @@
+[project]
+name = "tnc"
+version = "0.1.0"
+description = "Umbrella package for Testing&Certification Python packages"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+pkga = [ "pkga" ]
+pkgb = [ "pkgb" ]
+pkgc = [ "pkgc" ]
+
+[tool.uv.workspace]
+members = [
+    "packages/*",
+]
+
+[tool.uv.sources]
+core = { workspace = true }
+pkga = { workspace = true }
+pkgb = { workspace = true }
+pkgc = { workspace = true }

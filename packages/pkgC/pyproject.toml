@@ -1,0 +1,12 @@
+[project]
+name = "pkgC"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Mikhail Samokhin", email = "mikhail.samokhin@nexigroup.com" }
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
