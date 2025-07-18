@@ -16,6 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo '::group::My Lovely Procedure'
+          echo '::group::🛠️ My Lovely Procedure'
           trap 'echo ::endgroup::' EXIT
           echo ":red_circle: **Scylla, Smoke**, success, 📁[Artifacts](http://localhost:8000/20230810T161128.403165174__Docs/)"
