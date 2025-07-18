@@ -16,19 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          echo \
-          ":red_circle: **Scylla, Smoke**, success, 📁[Artifacts](http://10.42.9.150:8000/20230810T161128.403165174__Docs/)" \
-          >> $GITHUB_STEP_SUMMARY
-      - run: |
-          echo "::notice title=Completed::📁[Artifacts](http://10.42.9.150:8000/20230810T161128.403165174__Docs/)"
-          sleep 3
-  job2:
-    runs-on: ubuntu-latest
-    needs: job1
-    steps:
-      - run: |
-          echo "**Nonii, moi! Olen job2**" >> $GITHUB_STEP_SUMMARY
-      - run: |
-          echo \
-          ":green_circle: **Charybdis, Smoke**, failure, 📁[Artifacts](http://10.42.9.150:8000/20230810T161128.403165174__Docs/)" \
-          >> $GITHUB_STEP_SUMMARY
+          echo '::group::My Lovely Procedure'
+          trap 'echo ::endgroup::' EXIT
+          echo ":red_circle: **Scylla, Smoke**, success, 📁[Artifacts](http://localhost:8000/20230810T161128.403165174__Docs/)"
